@@ -4,7 +4,7 @@ import {
   decodeMarkup,
   parseSize,
   createDOMelement,
-  addStyles,
+  appendToParent,
 } from "../../helpers.js";
 
 import AdFrame from "./adframe.js";
@@ -14,6 +14,11 @@ class AdRenderer {
     this.ads = ads;
   }
 
+  /**
+   * @private
+   * @description Renders the middle ads
+   * @returns {void}
+   */
   _renderMiddleAds() {
     const middleAds = this.ads.filter(
       (ad) => (ad.type || "").toLowerCase() === "middle"
@@ -36,6 +41,11 @@ class AdRenderer {
     }
   }
 
+  /**
+   * @private
+   * @description Renders the sticky ad
+   * @returns {void}
+   */
   _renderStickyAd() {
     const stickyAd = this.ads.find(
       (ad) => (ad.type || "").toLowerCase() === "sticky"
@@ -46,14 +56,23 @@ class AdRenderer {
     const nodes = decodeMarkup(stickyAd.markup);
     const { w, h } = parseSize(stickyAd.size);
     const stickyAdEl = new AdFrame(w, h, nodes, stickyAd.type);
-    const stickyCloseButton = createDOMelement("button", "sticky__close", "×");
+    const stickyCloseButton = createDOMelement(
+      "button",
+      "adframe--sticky-ad__close",
+      "×"
+    );
 
     stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
+    stickyCloseButton.title = "[Adsert] Close sticky ad";
     stickyCloseButton.textContent = "×";
     stickyCloseButton.addEventListener("click", () => stickyAdEl.remove());
 
     stickyAdEl.render().appendChild(stickyCloseButton);
-    document.body.appendChild(stickyAdEl.render());
+    document.body.appendChild(
+      stickyAdEl.render((adEl) => {
+        appendToParent(adEl, stickyCloseButton);
+      })
+    );
   }
 
   render() {

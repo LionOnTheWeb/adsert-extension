@@ -19,6 +19,19 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
+
+  & .adsert__adframe--sticky-ad__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(50, 50, 50, 0.75);
+    border: 0;
+    cursor: pointer;
+    color: #fff;
+    padding: 0.2rem;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+  }
 }
 
 .adsert__adframe__wrapper--middle-ad {

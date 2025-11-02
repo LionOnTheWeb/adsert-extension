@@ -23,7 +23,12 @@ class AdFrame {
     this.adframeWrapper = null;
   }
 
-  render() {
+  /**
+   * @description Renders the adframe and appends the nodes to the adframe
+   * @param {Function} callback - The callback function to be called when the adframe is rendered
+   * @returns {Element} - The adframe wrapper element
+   */
+  render(callback) {
     console.log("rendering adframe for type: ", this.type);
     this.adframeWrapper = createDOMelement(
       "div",
@@ -38,6 +43,7 @@ class AdFrame {
 
     appendToParent(this.adframe, ...this.nodes);
     appendToParent(this.adframeWrapper, this.adframe);
+    if (callback) callback(this.adframeWrapper);
     return this.adframeWrapper;
   }
 }
