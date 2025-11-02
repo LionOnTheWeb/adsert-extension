@@ -9,8 +9,8 @@
   display: block;
   overflow: hidden;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
+  border-radius: calc(12 / 16 * 1rem); /* uses css px to rem conversion */
+  box-shadow: 0 calc(8 / 16 * 1rem) calc(26 / 16 * 1rem) rgba(0, 0, 0, 0.18); /* uses css px to rem conversion */
 }
 
 .adsert__adframe__wrapper--sticky-ad {
@@ -28,8 +28,7 @@
     border: 0;
     cursor: pointer;
     color: #fff;
-    padding: 0.2rem;
-    border-radius: 8px;
+    padding: 0.25rem; /* 4px */
     transition: background 0.15s ease;
   }
 }
@@ -39,6 +38,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 24px 0;
+  margin: 1.5rem 0; /* 24px */
   transform: scale(var(--ad-scale, 1));
 }

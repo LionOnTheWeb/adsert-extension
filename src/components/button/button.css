@@ -1,6 +1,6 @@
 .adsert__button__wrapper {
   position: fixed;
-  inset: auto 16px 16px auto;
+  inset: auto calc(16 / 16 * 1rem) calc(16 / 16 * 1rem) auto; /* uses css px to rem conversion */
   z-index: 9999;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
@@ -9,21 +9,21 @@
 .adsert__button {
   appearance: none;
   border: 0;
-  padding: 10px 14px;
+  padding: calc(10 / 16 * 1rem) calc(14 / 16 * 1rem); /* uses css px to rem conversion */
   font-weight: 600;
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: calc(12 / 16 * 1rem); /* uses css px to rem conversion */
   background: rgba(20, 20, 20, 0.65);
   color: #fff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 calc(6 / 16 * 1rem) calc(20 / 16 * 1rem) rgba(0, 0, 0, 0.25); /* uses css px to rem conversion */
   transition: transform 0.08s ease, box-shadow 0.2s ease, background 0.2s ease;
-  -webkit-backdrop-filter: saturate(1.2) blur(6px);
-  backdrop-filter: saturate(1.2) blur(6px);
+  -webkit-backdrop-filter: saturate(1.2) blur(calc(6 / 16 * 1rem)); /* uses css px to rem conversion */
+  backdrop-filter: saturate(1.2) blur(calc(6 / 16 * 1rem)); /* uses css px to rem conversion */
 }
 
 .adsert__button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  transform: translateY(calc(-1 / 16 * 1rem));
+  box-shadow: 0 calc(10 / 16 * 1rem) calc(24 / 16 * 1rem) rgba(0, 0, 0, 0.28); /* uses css px to rem conversion */
   background: rgba(20, 20, 20, 0.92);
 }
 
