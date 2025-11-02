@@ -1,0 +1,30 @@
+.adsert__adframe__wrapper {
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 auto;
+}
+
+.adsert__adframe {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
+}
+
+.adsert__adframe__wrapper--sticky-ad {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+.adsert__adframe__wrapper--middle-ad {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0;
+}

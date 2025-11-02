@@ -1,0 +1,33 @@
+{
+	"manifest_version": 3,
+	"name": "KARGO Adsert",
+	"version": "1.0.0",
+	"description": "Coding challenge for KARGO: Adsert browser extension fetches ads and injects them as sticky/middle units on specified sites.",
+	"content_scripts": [
+		{
+			"matches": [
+				"https://www.distractify.com/*",
+				"https://cookieandkate.com/*"
+			],
+			"js": [
+				"content.js"
+			],
+			"run_at": "document_idle"
+		}
+	],
+	"host_permissions": [
+		"https://storage.cloud.kargo.com/*"
+	],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"src/*",
+				"styles/*"
+			],
+			"matches": [
+				"https://www.distractify.com/*",
+				"https://cookieandkate.com/*"
+			]
+		}
+	]
+}
