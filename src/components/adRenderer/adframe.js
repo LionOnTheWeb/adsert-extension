@@ -2,7 +2,6 @@ import {
   computeAdScale,
   createDOMelement,
   appendToParent,
-  addStyles,
 } from "../../helpers.js";
 
 /**
@@ -29,7 +28,6 @@ class AdFrame {
    * @returns {Element} - The adframe wrapper element
    */
   render(callback) {
-    console.log("rendering adframe for type: ", this.type);
     this.adframeWrapper = createDOMelement(
       "div",
       `adframe__wrapper--${this.type}-ad`,
@@ -40,6 +38,9 @@ class AdFrame {
       width: `${this.width}px`,
       height: `${this.height}px`,
     });
+
+    const scale = computeAdScale(this.width);
+    this.adframeWrapper.style.setProperty("--ad-scale", scale);
 
     appendToParent(this.adframe, ...this.nodes);
     appendToParent(this.adframeWrapper, this.adframe);

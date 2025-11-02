@@ -14,7 +14,6 @@ const ads = await fetchAds(ENDPOINT);
 addStyles([chrome.runtime.getURL("./src/adsert.css")]);
 
 const adsertButton = new Button(() => {
-  console.log("[Adsert] Button clicked");
   try {
     const adRenderer = new AdRenderer(ads);
     adRenderer.render();
