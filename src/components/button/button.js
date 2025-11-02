@@ -7,7 +7,7 @@ import { createDOMelement, appendToParent, addStyles } from "../../helpers.js";
  * @returns {Element} - The button element
  */
 class Button {
-  constructor(callback) {
+  constructor(events, callback) {
     this.buttonDefaultText = "Inject Ads";
     this.buttonEl = createDOMelement(
       "button",
@@ -19,28 +19,26 @@ class Button {
     this.buttonEl.text = this.buttonDefaultText;
     this.buttonWrapper = createDOMelement("div", "button__wrapper", "");
     this.buttonWrapper.appendChild(this.buttonEl);
-    this.render();
+    this.events = events;
+    this.buttonStates = this.render();
   }
 
   render() {
+    Object.values(this.events).forEach((event) => {
+      document.addEventListener(event, (event) =>
+        this.updateButtonText(event.detail.text)
+      );
+    });
     return this.buttonWrapper;
   }
 
-  updateState(state) {
-    switch (state) {
-      case "fetch":
-        this.buttonEl.text = "Fetching ads...";
-        break;
-      case "success":
-        this.buttonEl.text = "Ads injected!";
-        break;
-      case "error":
-        this.buttonEl.text = "Error injecting ads";
-        break;
-      default:
-        this.buttonEl.text = this.buttonDefaultText;
-        break;
-    }
+  /**
+   * Updates the button text with event detail text
+   * @param {string} text - The text to update the button to
+   * @returns {void}
+   */
+  updateButtonText(text) {
+    this.buttonEl.innerText = text;
   }
 
   reset() {

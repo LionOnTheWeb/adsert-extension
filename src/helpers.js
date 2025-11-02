@@ -156,6 +156,36 @@ function computeAdScale(targetWidth, margin = 24) {
   return Math.min(1, maxW / targetWidth);
 }
 
+/**
+ * Emits a custom Adsert event
+ * @param {string} eventName - The name of the event
+ * @param {Object} detail - The detail of the event
+ * @param {string} detail.text - The text of the event
+ * @param {string} detail.state - The state of the event
+ * @param {Element} detail.source - The source of the event
+ * @param {boolean} bubbles - Whether the event should bubble
+ * @returns {void}
+ */
+function emitAdsertEvent(
+  eventName,
+  detail = {},
+  bubbles = true,
+  element = document
+) {
+  const adsertEvent = new CustomEvent(eventName, {
+    detail: {
+      text: detail.text,
+      state: detail.state,
+      source: element,
+      ...detail,
+    },
+    bubbles: bubbles,
+    source: element,
+  });
+
+  element?.dispatchEvent(adsertEvent);
+}
+
 export {
   decodeMarkup,
   parseSize,
@@ -166,4 +196,5 @@ export {
   appendToParent,
   computeAdScale,
   fetchAds,
+  emitAdsertEvent,
 };
