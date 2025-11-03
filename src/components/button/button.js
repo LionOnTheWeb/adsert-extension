@@ -1,4 +1,4 @@
-import { createDOMelement, appendToParent, addStyles } from "../../helpers.js";
+import { createDOMelement } from "../../helpers.js";
 
 /**
  * @class Button
@@ -9,18 +9,20 @@ import { createDOMelement, appendToParent, addStyles } from "../../helpers.js";
 class Button {
   constructor(events, callback) {
     this.buttonDefaultText = "Inject Ads";
+
     this.buttonEl = createDOMelement(
       "button",
       "button",
       this.buttonDefaultText
     );
     this.buttonEl.addEventListener("click", callback);
-    this.buttonEl.title = "Fetch & inject ads";
+    this.buttonEl.title = "[Adsert] Fetch & inject ads";
     this.buttonEl.text = this.buttonDefaultText;
+
     this.buttonWrapper = createDOMelement("div", "button__wrapper", "");
     this.buttonWrapper.appendChild(this.buttonEl);
+
     this.events = events;
-    this.buttonStates = this.render();
   }
 
   render() {
@@ -41,10 +43,23 @@ class Button {
     this.buttonEl.innerText = text;
   }
 
-  reset() {
-    this.buttonEl.text = this.buttonDefaultText;
-    this.buttonEl.disabled = false;
-    this.buttonEl.title = "Fetch & inject ads";
+  /**
+   * @description Destroys the button after timeout
+   * @param {number} timeout - The timeout in milliseconds
+   * @returns {void}
+   */
+  destroy(timeout = 5000) {
+    this.buttonEl.disabled = true;
+    this.buttonEl.removeEventListener("click", this.callback);
+    Object.values(this.events).forEach((event) =>
+      document.removeEventListener(event, (event) =>
+        this.updateButtonText(event.detail.text)
+      )
+    );
+
+    setTimeout(() => {
+      this.buttonWrapper.remove();
+    }, timeout);
   }
 }
 

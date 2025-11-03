@@ -5,13 +5,21 @@ import {
   parseSize,
   createDOMelement,
   appendToParent,
+  emitAdsertEvent,
 } from "../../helpers.js";
 
 import AdFrame from "./adframe.js";
 
+/**
+ * @class AdRenderer
+ * @description Renders the ads into the page
+ * @param {Object} events - Adsert events for emitting events
+ * @param {Array} ads - Ads response from the API
+ */
 class AdRenderer {
-  constructor(ads) {
+  constructor(events, ads) {
     this.ads = ads;
+    this.events = events;
   }
 
   /**
@@ -19,25 +27,38 @@ class AdRenderer {
    * @description Renders the middle ads
    * @returns {void}
    */
-  _renderMiddleAds() {
+  async _renderMiddleAds() {
     const middleAds = this.ads.filter(
       (ad) => (ad.type || "").toLowerCase() === "middle"
     );
 
     if (!middleAds.length) return;
 
-    const container = findArticleContainer();
-    const middleSlots = getMiddleAdInsertionSlots(container, middleAds.length);
-    let middleAdIndex = 0;
+    try {
+      const container = findArticleContainer();
+      const middleSlots = getMiddleAdInsertionSlots(
+        container,
+        middleAds.length
+      );
+      let middleAdIndex = 0;
 
-    for (const ad of middleAds) {
-      if (!ad.type || ad.type.toLowerCase() !== "middle") return;
+      for (const ad of middleAds) {
+        if (!ad.type || ad.type.toLowerCase() !== "middle") return;
 
-      const nodes = decodeMarkup(ad.markup);
-      const { w, h } = parseSize(ad.size);
-      const middleAdEl = new AdFrame(w, h, nodes, ad.type);
+        const nodes = decodeMarkup(ad.markup);
+        const { w, h } = parseSize(ad.size);
+        const middleAdEl = new AdFrame(w, h, nodes, ad.type);
 
-      middleSlots[middleAdIndex++].appendChild(middleAdEl.render());
+        middleSlots[middleAdIndex++].appendChild(middleAdEl.render());
+      }
+    } catch (error) {
+      console.error("[Adsert] Error rendering middle ads: ", error);
+      emitAdsertEvent(this.events.error, {
+        text: "Error rendering middle ads 🚨",
+        state: "error",
+        source: this,
+      });
+      return;
     }
   }
 
@@ -46,38 +67,66 @@ class AdRenderer {
    * @description Renders the sticky ad
    * @returns {void}
    */
-  _renderStickyAd() {
+  async _renderStickyAd() {
     const stickyAd = this.ads.find(
       (ad) => (ad.type || "").toLowerCase() === "sticky"
     );
 
     if (!stickyAd) return;
 
-    const nodes = decodeMarkup(stickyAd.markup);
-    const { w, h } = parseSize(stickyAd.size);
-    const stickyAdEl = new AdFrame(w, h, nodes, stickyAd.type);
-    const stickyCloseButton = createDOMelement(
-      "button",
-      "adframe--sticky-ad__close",
-      "×"
-    );
+    try {
+      const nodes = decodeMarkup(stickyAd.markup);
+      const { w, h } = parseSize(stickyAd.size);
+      const stickyAdEl = new AdFrame(w, h, nodes, stickyAd.type);
+      const stickyCloseButton = createDOMelement(
+        "button",
+        "adframe--sticky-ad__close",
+        "×"
+      );
 
-    stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
-    stickyCloseButton.title = "[Adsert] Close sticky ad";
-    stickyCloseButton.textContent = "×";
-    stickyCloseButton.addEventListener("click", () => stickyAdEl.remove());
+      stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
+      stickyCloseButton.title = "[Adsert] Close sticky ad";
+      stickyCloseButton.textContent = "×";
+      stickyCloseButton.addEventListener("click", () => stickyAdEl.remove());
 
-    stickyAdEl.render().appendChild(stickyCloseButton);
-    document.body.appendChild(
-      stickyAdEl.render((adEl) => {
-        appendToParent(adEl, stickyCloseButton);
-      })
-    );
+      stickyAdEl.render().appendChild(stickyCloseButton);
+      document.body.appendChild(
+        stickyAdEl.render((adEl) => {
+          appendToParent(adEl, stickyCloseButton);
+        })
+      );
+    } catch (error) {
+      console.error("[Adsert] Error rendering sticky ad: ", error);
+      emitAdsertEvent(this.events.error, {
+        text: "Error rendering sticky ad 🚨",
+        state: "error",
+        source: this,
+      });
+      return;
+    }
   }
 
-  render() {
-    this._renderMiddleAds();
-    this._renderStickyAd();
+  /**
+   * @description Injects the ads into the page
+   * @returns {void}
+   */
+  async render() {
+    try {
+      await this._renderMiddleAds();
+      await this._renderStickyAd();
+      emitAdsertEvent(this.events.injected, {
+        text: "Ads injected 🎉",
+        state: "injected",
+      });
+    } catch (error) {
+      console.error("[Adsert] Error rendering ads: ", error);
+      emitAdsertEvent(this.events.error, {
+        text: "Error rendering ads 🚨",
+        state: "error",
+        source: this,
+      });
+      return;
+    }
   }
 }
 
