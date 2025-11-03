@@ -30,3 +30,13 @@ ad-injector/
 
 ```
 
+## How to Install the Extension
+
+1. Clone the repository
+2. Load the extension in Chrome by navigating to `chrome://extensions/` and enabling developer mode.
+3. Click "Load unpacked" and select the repository root folder.
+4. The extension should now be installed and can be used on the specified websites.
+
+## Notes
+
+- The extension is designed to be used on the specified websites.
