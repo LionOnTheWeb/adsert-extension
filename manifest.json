@@ -2,6 +2,7 @@
 	"manifest_version": 3,
 	"name": "KARGO Adsert",
 	"version": "1.0.0",
+	"author": "Asad Richardson -- Senior Javascript Software Engineer @ KARGO",
 	"description": "Coding challenge for KARGO: Adsert browser extension fetches ads and injects them as sticky/middle units on specified sites.",
 	"content_scripts": [
 		{

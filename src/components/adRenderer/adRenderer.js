@@ -87,7 +87,10 @@ class AdRenderer {
       stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
       stickyCloseButton.title = "[Adsert] Close sticky ad";
       stickyCloseButton.textContent = "×";
-      stickyCloseButton.addEventListener("click", () => stickyAdEl.remove());
+
+      stickyCloseButton.addEventListener("click", () =>
+        document.querySelector(`.${stickyAdEl.render().className}`).remove()
+      );
 
       stickyAdEl.render().appendChild(stickyCloseButton);
       document.body.appendChild(
