@@ -64,6 +64,17 @@ class AdRenderer {
 
   /**
    * @private
+   * @description Waits for the element to be rendered in the DOM
+   * @param {Element} element - The element to wait for
+   * @returns {Promise<void>}
+   */
+  async _waitForElementToRender(element) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+
+  /**
+   * @private
    * @description Renders the sticky ad
    * @returns {void}
    */
@@ -78,26 +89,29 @@ class AdRenderer {
       const nodes = decodeMarkup(stickyAd.markup);
       const { w, h } = parseSize(stickyAd.size);
       const stickyAdEl = new AdFrame(w, h, nodes, stickyAd.type);
+
+      // Render the sticky ad element
+      const stickyAdElement = stickyAdEl.render();
+
+      // Append to DOM first
+      document.body.appendChild(stickyAdElement);
+
+      // Wait for the ad to be fully rendered (including images)
+      await this._waitForElementToRender(stickyAdElement);
+
+      // Now create and append the close button after the ad is fully rendered
       const stickyCloseButton = createDOMelement(
         "button",
         "adframe--sticky-ad__close",
         "×"
       );
-
       stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
       stickyCloseButton.title = "[Adsert] Close sticky ad";
       stickyCloseButton.textContent = "×";
-
       stickyCloseButton.addEventListener("click", () =>
-        document.querySelector(`.${stickyAdEl.render().className}`).remove()
+        stickyAdElement.remove()
       );
-
-      stickyAdEl.render().appendChild(stickyCloseButton);
-      document.body.appendChild(
-        stickyAdEl.render((adEl) => {
-          appendToParent(adEl, stickyCloseButton);
-        })
-      );
+      stickyAdElement.appendChild(stickyCloseButton);
     } catch (error) {
       console.error("[Adsert] Error rendering sticky ad: ", error);
       emitAdsertEvent(this.events.error, {
