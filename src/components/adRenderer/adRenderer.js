@@ -107,7 +107,6 @@ class AdRenderer {
       );
       stickyCloseButton.setAttribute("aria-label", "[Adsert] Close sticky ad");
       stickyCloseButton.title = "[Adsert] Close sticky ad";
-      stickyCloseButton.textContent = "×";
       stickyCloseButton.addEventListener("click", () =>
         stickyAdElement.remove()
       );
