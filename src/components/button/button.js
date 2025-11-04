@@ -8,30 +8,37 @@ import { createDOMelement } from "../../helpers.js";
  */
 class Button {
   constructor(events, callback) {
-    this.buttonDefaultText = "Inject Ads";
-
-    this.buttonEl = createDOMelement(
-      "button",
-      "button",
-      this.buttonDefaultText
-    );
-    this.buttonEl.addEventListener("click", callback);
-    this.buttonEl.title = "[Adsert] Fetch & inject ads";
-    this.buttonEl.text = this.buttonDefaultText;
-
-    this.buttonWrapper = createDOMelement("div", "button__wrapper", "");
-    this.buttonWrapper.appendChild(this.buttonEl);
-
     this.events = events;
+    this.callback = callback;
   }
 
   render() {
+    const buttonWrapperEl = this.buildButton();
     Object.values(this.events).forEach((event) => {
       document.addEventListener(event, (event) =>
         this.updateButtonText(event.detail.text)
       );
     });
-    return this.buttonWrapper;
+
+    return buttonWrapperEl;
+  }
+
+  /**
+   * @description Builds the button element
+   * @returns {Element} - The button wrapper element
+   */
+  buildButton() {
+    const buttonDefaultText = "Inject Ads";
+    const buttonEl = createDOMelement("button", "button", buttonDefaultText);
+    const buttonWrapper = createDOMelement("div", "button__wrapper", "");
+
+    buttonEl.addEventListener("click", this.callback);
+    buttonEl.title = "[Adsert] Fetch & inject ads";
+    buttonEl.text = buttonDefaultText;
+
+    buttonWrapper.appendChild(buttonEl);
+
+    return buttonWrapper;
   }
 
   /**
@@ -44,7 +51,7 @@ class Button {
   }
 
   /**
-   * @description Destroys the button after timeout
+   * @description Updates the button text and destroys the button after timeout
    * @param {number} timeout - The timeout in milliseconds
    * @returns {void}
    */

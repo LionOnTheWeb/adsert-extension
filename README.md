@@ -37,6 +37,13 @@ ad-injector/
 3. Click "Load unpacked" and select the repository root folder.
 4. The extension should now be installed and can be used on the specified websites.
 
+
+
+> [!WARNING]
+> This extension uses the newly available `& nesting selector` css feature, which is only supported in devices and browsers updated since December 2023.
+> If you are using an older device or browser, some styles may not be applied correctly.
+> Read more about the `& nesting selector` css feature browser compatibility [here](https://developer.mozilla.org/en-US/docs/Web/CSS/Nesting_selector#browser_compatibility).
+
 ## Notes
 
 - The extension is designed to be used on the specified websites.
